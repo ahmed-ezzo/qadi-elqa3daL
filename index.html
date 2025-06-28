@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>قاضي القاعده</title>
+    
+    <!-- Google Font for Arabic text -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Link to your CSS file -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    
+    <!-- HTML Content -->
+    <div id="game-container">
+
+        <!-- Screen 0: Splash Screen -->
+        <div id="screen-splash" class="screen flex flex-col items-center justify-center text-center p-8 space-y-10">
+            <h1 class="splash-title">قاضي القاعده</h1>
+            <button onclick="showScreen('setup')" class="btn btn-secondary w-3/4">ادخل</button>
+        </div>
+
+        <!-- Screen 1: Player Setup -->
+        <div id="screen-setup" class="hidden screen space-y-4">
+            <button onclick="showScreen('splash')" class="btn back-btn">
+                <svg viewBox="0 0 100 100"><polygon points="70,5 20,50 70,95"/></svg>
+            </button>
+            <h1 class="title">إعدادات اللعبة</h1>
+            <p class="subtitle">أضف 3 لاعبين على الأقل.</p>
+            <div class="flex gap-2">
+                <input type="text" id="playerNameInput" placeholder="اكتب اسم لاعب جديد..." class="flex-grow"/>
+                <button onclick="addPlayer()" class="btn btn-primary w-auto flex-shrink-0 px-4">أضف</button>
+            </div>
+            <div id="player-list-setup" class="space-y-2"></div>
+            <p id="error-message" class="text-red-500 text-center h-4 font-bold"></p>
+            
+            <div class="space-y-2 pt-2">
+                <p class="subtitle">اختر عدد الجولات:</p>
+                <div id="rounds-selection" class="grid grid-cols-4 gap-2">
+                    <button onclick="selectRounds(5)" class="btn-round selected">5</button>
+                    <button onclick="selectRounds(10)" class="btn-round">10</button>
+                    <button onclick="selectRounds(15)" class="btn-round">15</button>
+                    <button onclick="selectRounds(20)" class="btn-round">20</button>
+                </div>
+            </div>
+
+            <button id="startGameBtn" onclick="beginGame()" class="btn btn-secondary" disabled>ابدأ اللعبة</button>
+        </div>
+        
+        <!-- Screen 2: Round Info -->
+        <div id="screen-round-info" class="hidden screen text-center space-y-4">
+            <button onclick="showScreen('setup')" class="btn back-btn">
+                 <svg viewBox="0 0 100 100"><polygon points="70,5 20,50 70,95"/></svg>
+            </button>
+            <h2 id="round-title" class="text-2xl font-bold text-blue-800"></h2>
+            <p id="judge-announcement" class="text-xl font-bold"></p>
+            
+            <div class="inset-panel">
+                <h3 class="font-bold text-gray-800 mb-2">📜 قصة الجريمة</h3>
+                <p id="crime-story" class="text-gray-700 font-bold"></p>
+            </div>
+            
+            <p class="text-gray-600">الآن، على كل لاعب معرفة دوره السري بالترتيب.</p>
+
+            <div id="role-reveal-container" class="space-y-4">
+                 <p class="text-xl">الدور الآن على:</p>
+                 <h3 id="currentPlayerName" class="text-3xl font-extrabold text-blue-600"></h3>
+                 <button id="revealRoleBtn" onclick="revealRole()" class="btn btn-primary w-full">🔍 اكشف عن دورك السري</button>
+            </div>
+            <div id="role-display-container" class="hidden text-center space-y-4 inset-panel">
+                <p>دورك هو...</p>
+                <p id="playerRole" class="text-3xl font-bold"></p>
+                <button onclick="hideRole()" class="btn btn-secondary w-full">فهمت! (إخفاء)</button>
+            </div>
+        </div>
+        
+        <!-- Screen 3: Judge's Screen -->
+        <div id="screen-judge" class="hidden screen text-center space-y-4">
+            <h2 id="judge-title" class="text-2xl font-bold text-blue-800"></h2>
+            <p class="text-slate-600">بعد الاستماع للجميع، اختر من تظنه "المجرم" لتدينه.</p>
+            <div id="conviction-list" class="space-y-2"></div>
+        </div>
+
+        <!-- Screen 4: Result Screen -->
+        <div id="screen-result" class="hidden screen text-center space-y-4">
+            <h2 class="text-3xl font-bold text-blue-800">صدر الحكم!</h2>
+            <div class="inset-panel space-y-3">
+                <p id="verdict" class="text-xl font-bold"></p>
+                <hr/>
+                <p id="criminal-reveal" class="text-lg"></p>
+            </div>
+            <div id="scoreBoard" class="space-y-1"></div>
+            <button id="nextRoundBtn" onclick="nextRound()" class="btn btn-primary w-full">الجولة التالية</button>
+        </div>
+        
+        <!-- Screen 5: Game Over -->
+        <div id="screen-game-over" class="hidden screen text-center space-y-4">
+            <h1 class="title">انتهت اللعبة!</h1>
+            <p class="text-xl font-bold">الترتيب النهائي:</p>
+            <div id="final-scores" class="text-lg space-y-2"></div>
+            <button onclick="restartGame()" class="btn btn-secondary w-full">العب مرة أخرى</button>
+        </div>
+
+    </div>
+
+    <!-- Link to your JavaScript file -->
+    <script src="script.js"></script>
+</body>
+</html>
