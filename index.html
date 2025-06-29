@@ -15,20 +15,25 @@
 </head>
 <body>
     
-    <!-- HTML Content -->
     <div id="game-container">
-
-        <!-- Screen 0: Splash Screen -->
-        <div id="screen-splash" class="screen flex flex-col items-center justify-center text-center p-8 space-y-10">
+        <!-- Screen 0: Splash -->
+        <div id="screen-splash" class="screen">
             <h1 class="splash-title">قاضي القاعده</h1>
             <button onclick="showScreen('setup')" class="btn btn-secondary w-3/4">ادخل</button>
         </div>
 
-        <!-- Screen 1: Player Setup -->
-        <div id="screen-setup" class="hidden screen space-y-4">
-            <button onclick="showScreen('splash')" class="btn back-btn">
-                <svg viewBox="0 0 100 100"><polygon points="70,5 20,50 70,95"/></svg>
-            </button>
+        <!-- Screen 1: Setup -->
+        <div id="screen-setup" class="screen hidden">
+             <div class="top-buttons-container">
+                <button onclick="toggleRules(true)" class="corner-btn menu-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="white" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+                     <span>القائمة</span>
+                </button>
+                <button onclick="showScreen('splash')" class="corner-btn back-btn">
+                     <svg viewBox="0 0 100 100"><polygon points="70,5 20,50 70,95"/></svg>
+                     <span>رجوع</span>
+                </button>
+            </div>
             <h1 class="title">إعدادات اللعبة</h1>
             <p class="subtitle">أضف 3 لاعبين على الأقل.</p>
             <div class="flex gap-2">
@@ -37,7 +42,6 @@
             </div>
             <div id="player-list-setup" class="space-y-2"></div>
             <p id="error-message" class="text-red-500 text-center h-4 font-bold"></p>
-            
             <div class="space-y-2 pt-2">
                 <p class="subtitle">اختر عدد الجولات:</p>
                 <div id="rounds-selection" class="grid grid-cols-4 gap-2">
@@ -48,28 +52,48 @@
                 </div>
             </div>
 
+            <div class="space-y-2 pt-2">
+                <p class="subtitle">اختر وقت الجولة (بالدقائق):</p>
+                <div id="time-selection" class="grid grid-cols-6 gap-2">
+                    <button onclick="selectTime(1)" class="btn-round selected">1</button>
+                    <button onclick="selectTime(2)" class="btn-round">2</button>
+                    <button onclick="selectTime(3)" class="btn-round">3</button>
+                    <button onclick="selectTime(4)" class="btn-round">4</button>
+                    <button onclick="selectTime(5)" class="btn-round">5</button>
+                    <button onclick="selectTime(6)" class="btn-round">6</button>
+                </div>
+            </div>
+
             <button id="startGameBtn" onclick="beginGame()" class="btn btn-secondary" disabled>ابدأ اللعبة</button>
         </div>
         
-        <!-- Screen 2: Round Info -->
-        <div id="screen-round-info" class="hidden screen text-center space-y-4">
-            <button onclick="showScreen('setup')" class="btn back-btn">
-                 <svg viewBox="0 0 100 100"><polygon points="70,5 20,50 70,95"/></svg>
-            </button>
-            <h2 id="round-title" class="text-2xl font-bold text-blue-800"></h2>
-            <p id="judge-announcement" class="text-xl font-bold"></p>
-            
-            <div class="inset-panel">
-                <h3 class="font-bold text-gray-800 mb-2">📜 قصة الجريمة</h3>
-                <p id="crime-story" class="text-gray-700 font-bold"></p>
+        <!-- Screen 2: Crime Info -->
+        <div id="screen-crime-info" class="screen hidden">
+             <div class="top-buttons-container">
+                <button onclick="toggleRules(true)" class="corner-btn menu-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="white" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+                     <span>القائمة</span>
+                </button>
+                 <button onclick="showScreen('setup')" class="corner-btn back-btn">
+                     <svg viewBox="0 0 100 100"><polygon points="70,5 20,50 70,95"/></svg>
+                     <span>رجوع</span>
+                </button>
             </div>
-            
-            <p class="text-gray-600">الآن، على كل لاعب معرفة دوره السري بالترتيب.</p>
+            <h2 id="round-title-crime" class="text-2xl font-bold"></h2>
+            <p id="judge-announcement" class="text-xl font-bold"></p>
+            <div class="inset-panel">
+                <h3 class="font-bold mb-2">📜 قصة الجريمة</h3>
+                <p id="crime-story" class="font-bold"></p>
+            </div>
+            <button onclick="showRoleRevealScreen()" class="btn btn-primary w-full">ابدأ كشف الأدوار</button>
+        </div>
 
-            <div id="role-reveal-container" class="space-y-4">
-                 <p class="text-xl">الدور الآن على:</p>
-                 <h3 id="currentPlayerName" class="text-3xl font-extrabold text-blue-600"></h3>
-                 <button id="revealRoleBtn" onclick="revealRole()" class="btn btn-primary w-full">🔍 اكشف عن دورك السري</button>
+        <!-- Screen 3: Role Reveal -->
+        <div id="screen-role-reveal" class="screen hidden">
+             <div id="role-reveal-container" class="space-y-4">
+                <p class="text-xl">الدور الآن على:</p>
+                <h3 id="currentPlayerName" class="text-3xl font-extrabold text-blue-600"></h3>
+                <button id="revealRoleBtn" onclick="revealRole()" class="btn btn-primary w-full">🔍 اكشف عن دورك السري</button>
             </div>
             <div id="role-display-container" class="hidden text-center space-y-4 inset-panel">
                 <p>دورك هو...</p>
@@ -77,17 +101,45 @@
                 <button onclick="hideRole()" class="btn btn-secondary w-full">فهمت! (إخفاء)</button>
             </div>
         </div>
-        
-        <!-- Screen 3: Judge's Screen -->
-        <div id="screen-judge" class="hidden screen text-center space-y-4">
-            <h2 id="judge-title" class="text-2xl font-bold text-blue-800"></h2>
+
+        <!-- NEW Screen 4: Investigation (Clues) -->
+        <div id="screen-investigation" class="screen hidden">
+            <h1 class="title">مرحلة التحقيق</h1>
+             <div id="timer-container" class="inset-panel mb-2 text-center">
+                 <h3 class="font-bold">⏳ الوقت المتبقي</h3>
+                 <p id="timer-display" class="text-3xl font-extrabold text-red-500">00:00</p>
+            </div>
+             <div class="inset-panel mb-4">
+                <h3 class="font-bold text-gray-800 mb-2">📜 القضية</h3>
+                <p id="crime-story-investigation" class="text-gray-700 font-bold"></p>
+            </div>
+            <div class="space-y-3">
+                 <div>
+                    <button id="revealClueBtn1" onclick="revealClue(1)" class="btn btn-clue w-full">🔍 كشف الدليل الأول</button>
+                    <p id="clueText1" class="clue-panel hidden mt-2"></p>
+                </div>
+                <div>
+                    <button id="revealClueBtn2" onclick="revealClue(2)" class="btn btn-clue w-full">🔍 كشف الدليل الثاني</button>
+                    <p id="clueText2" class="clue-panel hidden mt-2"></p>
+                </div>
+                <div>
+                    <button id="revealClueBtn3" onclick="revealClue(3)" class="btn btn-clue w-full">🔍 كشف الدليل الثالث</button>
+                    <p id="clueText3" class="clue-panel hidden mt-2"></p>
+                </div>
+            </div>
+            <button id="goToJudgeBtn" onclick="showJudgeScreen()" class="btn btn-danger w-full mt-4 hidden">👨‍⚖️ اذهب إلى القاضي</button>
+        </div>
+
+        <!-- Screen 5: Judge -->
+        <div id="screen-judge" class="screen hidden">
+            <h2 id="judge-title" class="text-2xl font-bold"></h2>
             <p class="text-slate-600">بعد الاستماع للجميع، اختر من تظنه "المجرم" لتدينه.</p>
             <div id="conviction-list" class="space-y-2"></div>
         </div>
 
-        <!-- Screen 4: Result Screen -->
-        <div id="screen-result" class="hidden screen text-center space-y-4">
-            <h2 class="text-3xl font-bold text-blue-800">صدر الحكم!</h2>
+        <!-- Screen 6: Result -->
+        <div id="screen-result" class="screen hidden">
+            <h2 class="text-3xl font-bold">صدر الحكم!</h2>
             <div class="inset-panel space-y-3">
                 <p id="verdict" class="text-xl font-bold"></p>
                 <hr/>
@@ -97,17 +149,53 @@
             <button id="nextRoundBtn" onclick="nextRound()" class="btn btn-primary w-full">الجولة التالية</button>
         </div>
         
-        <!-- Screen 5: Game Over -->
-        <div id="screen-game-over" class="hidden screen text-center space-y-4">
+        <!-- Screen 7: Game Over -->
+        <div id="screen-game-over" class="screen hidden">
             <h1 class="title">انتهت اللعبة!</h1>
             <p class="text-xl font-bold">الترتيب النهائي:</p>
             <div id="final-scores" class="text-lg space-y-2"></div>
             <button onclick="restartGame()" class="btn btn-secondary w-full">العب مرة أخرى</button>
         </div>
-
     </div>
-
-    <!-- Link to your JavaScript file -->
+    
+    <!-- Rules Modal -->
+    <div id="rules-modal" class="modal-overlay hidden">
+        <div class="screen rules-panel space-y-4">
+            <button onclick="toggleRules(false)" class="corner-btn" style="right: auto; left: 1rem; top: 1rem;">
+                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+            <h1 class="title">شرح اللعبة</h1>
+            <div>
+                <h4>الفكرة 💡</h4>
+                <p>لعبة تحقيق وذكاء. في كل جولة يوجد "قاضي" و "مجرم" متخفٍ وباقي اللاعبين "أبرياء". هدفكم هو كشف المجرم.</p>
+            </div>
+             <div>
+                <h4>الأدوار 🎭</h4>
+                <ul>
+                    <li><strong>القاضي 👨‍⚖️:</strong> يستمع فقط، ويحكم في النهاية.</li>
+                    <li><strong>المجرم 🦹‍♂️:</strong> يُعطى مهنة للتخفي، وهدفه خداع الجميع.</li>
+                    <li><strong>الأبرياء 😇:</strong> يساعدون القاضي في كشف المجرم.</li>
+                </ul>
+            </div>
+            <div>
+                <h4>طريقة اللعب 🎲</h4>
+                <ol class="list-decimal pr-4">
+                    <li>تظهر قضية ويتم اختيار قاضٍ عشوائي.</li>
+                    <li>كل لاعب يعرف دوره سراً.</li>
+                    <li>تبدأ مرحلة التحقيق بكشف 3 أدلة ومناقشتها قبل انتهاء الوقت.</li>
+                    <li>يصدر القاضي حكمه ويتهم لاعباً واحداً.</li>
+                </ol>
+            </div>
+            <div>
+                <h4>النقاط 🏆</h4>
+                <ul>
+                    <li>**القاضي يفوز:** يحصل على <strong>3 نقاط</strong> إذا كشف المجرم.</li>
+                    <li>**المجرم يفوز:** يحصل على <strong>نقطتين</strong> إذا أفلت من الحكم.</li>
+                </ul>
+            </div>
+             <button onclick="toggleRules(false)" class="btn btn-secondary w-full">فهمت</button>
+        </div>
+    </div>
     <script src="script.js"></script>
 </body>
 </html>
